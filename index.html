@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conic Section and Line Equation Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        h2 {
+            color: #333;
+        }
+        .form-group {
+            margin: 10px 0;
+        }
+        .form-group label,
+        .form-group input {
+            display: inline-block;
+            margin-right: 10px;
+        }
+        #equation {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+        .instructions {
+            margin-top: 10px;
+            font-style: italic;
+        }
+    </style>
+    <script>
+        function updateInstructions() {
+            var conicType = document.getElementById("conicType").value;
+            var instructions = "";
+
+            switch (conicType) {
+                case "circle":
+                    instructions = "Enter the center (x1, y1) and a point on the circle (x2, y2).";
+                    break;
+                case "parabola":
+                    instructions = "Enter the vertex (x1, y1) and a point on the parabola (x2, y2).";
+                    break;
+                case "ellipse":
+                    instructions = "Enter the center (x1, y1) and the endpoints of the major and minor axes (x2, y2).";
+                    break;
+                case "hyperbola":
+                    instructions = "Enter the center (x1, y1) and the vertices (x2, y2).";
+                    break;
+                case "line":
+                    instructions = "Enter two points on the line (x1, y1) and (x2, y2).";
+                    break;
+            }
+
+            document.getElementById("instructions").innerHTML = instructions;
+        }
+
+        function generateEquation() {
+            var conicType = document.getElementById("conicType").value;
+            var x1 = parseFloat(document.getElementById("x1").value);
+            var y1 = parseFloat(document.getElementById("y1").value);
+            var x2 = parseFloat(document.getElementById("x2").value);
+            var y2 = parseFloat(document.getElementById("y2").value);
+            var equation = "";
+
+            switch (conicType) {
+                case "circle":
+                    var r = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+                    equation = "(x - " + x1.toFixed(2) + ")² + (y - " + y1.toFixed(2) + ")² = " + r.toFixed(2) + "²";
+                    break;
+                case "parabola":
+                    var a = (y2 - y1) / Math.pow(x2 - x1, 2);
+                    equation = "y - " + y1.toFixed(2) + " = " + a.toFixed(2) + "(x - " + x1.toFixed(2) + ")²";
+                    break;
+                case "ellipse":
+                    var a = Math.abs(x2 - x1) / 2;
+                    var b = Math.abs(y2 - y1) / 2;
+                    var h = (x1 + x2) / 2;
+                    var k = (y1 + y2) / 2;
+                    equation = "((x - " + h.toFixed(2) + ")² / " + a.toFixed(2) + "²) + ((y - " + k.toFixed(2) + ")² / " + b.toFixed(2) + "²) = 1";
+                    break;
+                case "hyperbola":
+                    var a = Math.abs(x2 - x1) / 2;
+                    var b = Math.abs(y2 - y1) / 2;
+                    var h = (x1 + x2) / 2;
+                    var k = (y1 + y2) / 2;
+                    equation = "((x - " + h.toFixed(2) + ")² / " + a.toFixed(2) + "²) - ((y - " + k.toFixed(2) + ")² / " + b.toFixed(2) + "²) = 1";
+                    break;
+                case "line":
+                    if (x2 - x1 !== 0) {
+                        var m = (y2 - y1) / (x2 - x1);
+                        var c = y1 - m * x1;
+                        equation = "y = " + m.toFixed(2) + "x + " + c.toFixed(2);
+                    } else {
+                        equation = "x = " + x1;
+                    }
+                    break;
+            }
+
+            document.getElementById("equation").innerHTML = "Equation: " + equation;
+        }
+    </script>
+</head>
+<body>
+    <h2>Conic Section and Line Equation Generator</h2>
+    <label for="conicType">Select Type:</label>
+    <select id="conicType" onchange="updateInstructions()">
+        <option value="circle">Circle</option>
+        <option value="parabola">Parabola</option>
+        <option value="ellipse">Ellipse</option>
+        <option value="hyperbola">Hyperbola</option>
+        <option value="line">Line</option>
+    </select>
+    <div class="instructions" id="instructions">Select a conic section to see instructions.</div>
+    <div class="form-group">
+        <label for="x1">x1:</label>
+        <input type="number" id="x1" value="0">
+        <label for="y1">y1:</label>
+        <input type="number" id="y1" value="0">
+    </div>
+    <div class="form-group">
+        <label for="x2">x2:</label>
+        <input type="number" id="x2" value="0">
+        <label for="y2">y2:</label>
+        <input type="number" id="y2" value="0">
+    </div>
+    <button onclick="generateEquation()">Generate Equation</button>
+    <p id="equation">Equation:</p>
+</body>
+</html>
